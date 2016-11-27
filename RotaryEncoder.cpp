@@ -52,29 +52,37 @@ void RotaryEncoder::begin() {
   attachInterrupt(digitalPinToInterrupt(PIN_B), int1ISR, CHANGE);
 
   this->instance_ = this;
+  this->pos = 0;
+  this->lastPos = 0;
+  this->pinAState = LOW;
+  this->pinBState = LOW;
 
-  lastUpdate = millis();
-  encoderPos = INT_MAX >> 1;
+  this->lastUpdate = millis();
+  this->encoderPos = INT_MAX >> 1;
+
 }
 
-int RotaryEncoder::read() {
-  if (millis() - lastUpdate > DEBOUNCE_DELAY) {
-    if (encoderPos != INT_MAX >> 1) {
-      if (encoderPos > INT_MAX >> 1) {
-        pos++;
-        cb_onIncrement(*this);
+long RotaryEncoder::read() {
+  if (millis() - this->lastUpdate > DEBOUNCE_DELAY) {
+    if (this->encoderPos != INT_MAX >> 1) {
+      if (this->encoderPos > INT_MAX >> 1) {
+        if (++this->pos / 2 > this->lastPos) {
+          cb_onIncrement(*this);
+        }
       }
-      else if (encoderPos < INT_MAX >> 1) {
-        pos--;
-        cb_onDecrement(*this);
+      else if (this->encoderPos < INT_MAX >> 1) {
+        if (--this->pos / 2 < this->lastPos) {
+          cb_onDecrement(*this);
+        }
       }
     }
 
-    lastUpdate = millis();
-    encoderPos = INT_MAX >> 1;
+    this->lastPos = this->pos / 2;
+    this->lastUpdate = millis();
+    this->encoderPos = INT_MAX >> 1;
   }
 
-  return pos;
+  return this->pos / 2;
 }
 
 void RotaryEncoder::incrementHandler(rotaryEncoderEventHandler handler) {
@@ -98,11 +106,11 @@ void RotaryEncoder::pinBChange() {
 }
 
 void RotaryEncoder::int0ISR() {
-  instance_->pinAChange();
+  RotaryEncoder::instance_->pinAChange();
 }
 
 void RotaryEncoder::int1ISR() {
-  instance_->pinBChange();
+  RotaryEncoder::instance_->pinBChange();
 }
 
 RotaryEncoder* RotaryEncoder::instance_;

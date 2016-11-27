@@ -40,7 +40,7 @@
 #include <Arduino.h>
 #include <limits.h>
 
-#define DEBOUNCE_DELAY 35
+#define DEBOUNCE_DELAY 20
 
 #define PIN_A 2
 #define PIN_B 3
@@ -52,7 +52,7 @@ class RotaryEncoder {
   public:
     RotaryEncoder::RotaryEncoder(byte pinAInterrupt, byte pinBInterrupt);
     void RotaryEncoder::begin();
-    int RotaryEncoder::read();
+    long RotaryEncoder::read();
     void RotaryEncoder::incrementHandler(rotaryEncoderEventHandler handler);
     void RotaryEncoder::decrementHandler(rotaryEncoderEventHandler handler);
   private:
@@ -63,10 +63,11 @@ class RotaryEncoder {
     void RotaryEncoder::pinBChange();
     rotaryEncoderEventHandler cb_onIncrement;
     rotaryEncoderEventHandler cb_onDecrement;
-    volatile unsigned int encoderPos = 0;
-    unsigned int pos = 0;
-    volatile byte pinAState = LOW;
-    volatile byte pinBState = LOW;
+    volatile unsigned int encoderPos;
+    long pos;
+    long lastPos;
+    volatile byte pinAState;
+    volatile byte pinBState;
     long lastUpdate;
     byte pinAInterrupt;
     byte pinBInterrupt;
