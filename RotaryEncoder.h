@@ -56,6 +56,9 @@ class RotaryEncoder {
     void RotaryEncoder::incrementHandler(rotaryEncoderEventHandler handler);
     void RotaryEncoder::decrementHandler(rotaryEncoderEventHandler handler);
   private:
+    static RotaryEncoder* instance_;
+    static void int0ISR();
+    static void int1ISR();
     void RotaryEncoder::pinAChange();
     void RotaryEncoder::pinBChange();
     rotaryEncoderEventHandler cb_onIncrement;

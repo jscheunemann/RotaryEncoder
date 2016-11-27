@@ -48,8 +48,10 @@ void RotaryEncoder::begin() {
   digitalWrite(this->pinAInterrupt, HIGH);
   digitalWrite(this->pinBInterrupt, HIGH);
 
-  // attachInterrupt(digitalPinToInterrupt(this->pinAInterrupt), this->pinAChange, CHANGE);
-  // attachInterrupt(digitalPinToInterrupt(this->pinBInterrupt), this->pinBChange, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(PIN_A), int0ISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(PIN_B), int1ISR, CHANGE);
+
+  this->instance_ = this;
 
   lastUpdate = millis();
   encoderPos = INT_MAX >> 1;
@@ -94,3 +96,13 @@ void RotaryEncoder::pinBChange() {
     this->encoderPos--;
   }
 }
+
+void RotaryEncoder::int0ISR() {
+  instance_->pinAChange();
+}
+
+void RotaryEncoder::int1ISR() {
+  instance_->pinBChange();
+}
+
+RotaryEncoder* RotaryEncoder::instance_;
