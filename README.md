@@ -1,2 +1,2 @@
 # RotaryEncoder
-Arduino library to ready rotary encoders
+Arduino library to read rotary encoders
