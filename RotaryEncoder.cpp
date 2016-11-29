@@ -48,8 +48,8 @@ void RotaryEncoder::begin() {
   digitalWrite(this->pinAInterrupt, HIGH);
   digitalWrite(this->pinBInterrupt, HIGH);
 
-  attachInterrupt(digitalPinToInterrupt(PIN_A), int0ISR, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(PIN_B), int1ISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(this->pinAInterrupt), int0ISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(this->pinBInterrupt), int1ISR, CHANGE);
 
   this->instance_ = this;
   this->pos = 0;
