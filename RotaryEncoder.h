@@ -42,9 +42,6 @@
 
 #define DEBOUNCE_DELAY 20
 
-#define PIN_A 2
-#define PIN_B 3
-
 class RotaryEncoder;
 typedef void (*rotaryEncoderEventHandler)(RotaryEncoder&);
 
